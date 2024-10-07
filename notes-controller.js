@@ -33,12 +33,22 @@ async function printNotes(){
 
 async function removeNote(id) {
     const notes = await getNotes();
-    const stringId = JSON.stringify(id)
+    const stringId = id.toString();
     const updatedNotes = notes.filter(note => note.id !== stringId )
     await fs.writeFile(notesPath,JSON.stringify(updatedNotes));
     console.log(chalk.bgMagentaBright('Note was removed'));
 }
 
+async function editNote(id,newTitle) {
+    console.log(newTitle)
+    const notes = await getNotes();
+    const stringId = id.toString();
+    const noteFind = notes.find(note => note.id === stringId);
+    noteFind.title = newTitle;
+    await fs.writeFile(notesPath,JSON.stringify(notes));
+    console.log(chalk.blue('Note was edited'));
+}
+
 module.exports = {
-    addNote,printNotes,removeNote
+    addNote,printNotes,removeNote,getNotes,editNote
 }
